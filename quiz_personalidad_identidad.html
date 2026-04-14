@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz: Personalidad e Identidad</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FAF9F6;--surface:#FFFFFF;--surface2:#F0EDE8;--surface3:#E8E4DE;--text:#2D2B28;--text-muted:#8C8579;--border:#DDD8D0;--gen1:#2B6CB0;--gen1-bg:rgba(43,108,176,.08);--gen2:#C53030;--gen2-bg:rgba(197,48,48,.08);--gen3:#276749;--gen3-bg:rgba(39,103,73,.08);--gen4:#6B46C1;--gen4-bg:rgba(107,70,193,.08);--gen5:#B7791F;--gen5-bg:rgba(183,121,31,.08);--correct:#276749;--correct-bg:rgba(39,103,73,.1);--wrong:#C53030;--wrong-bg:rgba(197,48,48,.1);--accent:#D4A574;--accent2:#C4956A;--radius:12px;--shadow:0 1px 4px rgba(0,0,0,.06)}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.5}.app{max-width:800px;margin:0 auto;padding:1.5rem 1rem 3rem}.header{text-align:center;padding:2rem 0 1.5rem}.header h1{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);margin-bottom:.3rem}.header p{color:var(--text-muted);font-size:.9rem;font-weight:300}
+.login-screen{max-width:460px;margin:0 auto;text-align:center}.login-screen h2{font-family:'DM Serif Display',serif;font-size:1.6rem;margin-bottom:.5rem}.login-screen>p{color:var(--text-muted);font-size:.9rem;margin-bottom:1.5rem}.login-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 1.8rem;text-align:left;box-shadow:var(--shadow)}.login-toggle{display:flex;border-radius:10px;background:var(--surface2);padding:4px;margin-bottom:1.5rem;gap:4px}.toggle-btn{flex:1;padding:.6rem;border:none;border-radius:8px;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .2s}.toggle-btn.active{background:var(--surface);color:var(--text);box-shadow:var(--shadow)}
+.field{margin-bottom:1.1rem}.field label{display:block;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:.35rem}.field input,.field select{width:100%;padding:.75rem 1rem;background:var(--surface2);border:2px solid transparent;border-radius:10px;color:var(--text);font-family:'Nunito',sans-serif;font-size:.95rem;transition:border-color .2s}.field input:focus,.field select:focus{outline:none;border-color:var(--accent)}.field input::placeholder{color:var(--text-muted);opacity:.5}.field .hint{font-size:.73rem;color:var(--text-muted);margin-top:.25rem}.field .error-msg{font-size:.8rem;color:var(--wrong);margin-top:.25rem;display:none}
+.login-btn{width:100%;padding:.85rem;border:none;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:opacity .2s;margin-top:.3rem}.login-btn:hover{opacity:.9}
+.progress-wrap{background:var(--surface2);border-radius:20px;height:8px;margin:1rem 0;overflow:hidden}.progress-bar{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--gen1),var(--gen3),var(--gen4),var(--gen5));transition:width .5s ease}.progress-info{display:flex;justify-content:space-between;font-size:.8rem;color:var(--text-muted);margin-bottom:1.2rem}
+.student-tag{display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);padding:.3rem .8rem;border-radius:20px;font-size:.78rem;color:var(--text-muted);margin-bottom:.5rem}.student-tag .dot{width:6px;height:6px;background:var(--correct);border-radius:50%}
+.question-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2rem 1.8rem;box-shadow:var(--shadow);animation:fadeIn .4s ease}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.q-type{display:inline-block;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;padding:.3rem .8rem;border-radius:20px;margin-bottom:1rem}.q-type.test{background:var(--gen1-bg);color:var(--gen1)}.q-type.vf{background:var(--gen2-bg);color:var(--gen2)}
+.q-text{font-family:'DM Serif Display',serif;font-size:1.2rem;line-height:1.4;margin-bottom:1.5rem}.options{display:flex;flex-direction:column;gap:.5rem}
+.option-btn{background:var(--surface2);border:2px solid transparent;border-radius:10px;padding:.85rem 1.1rem;color:var(--text);font-family:'Nunito',sans-serif;font-size:.93rem;cursor:pointer;text-align:left;transition:all .2s;display:flex;align-items:center;gap:.7rem}.option-btn:hover:not(.disabled){border-color:var(--border);background:var(--surface3)}.option-btn .letter{flex-shrink:0;width:28px;height:28px;border-radius:7px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem}.option-btn.correct{border-color:var(--correct);background:var(--correct-bg)}.option-btn.correct .letter{background:var(--correct);color:#fff}.option-btn.wrong{border-color:var(--wrong);background:var(--wrong-bg)}.option-btn.wrong .letter{background:var(--wrong);color:#fff}.option-btn.disabled{cursor:default;opacity:.55}.option-btn.correct.disabled,.option-btn.wrong.disabled{opacity:1}
+.feedback{margin-top:1.1rem;padding:.9rem 1.1rem;border-radius:10px;font-size:.88rem;line-height:1.5;animation:fadeIn .3s ease}.feedback.fb-correct{background:var(--correct-bg);border-left:3px solid var(--correct)}.feedback.fb-wrong{background:var(--wrong-bg);border-left:3px solid var(--wrong)}.feedback strong{display:block;margin-bottom:.2rem}
+.next-btn{display:none;margin-top:1.2rem;width:100%;padding:.85rem;border:none;border-radius:10px;color:#fff;font-family:'Nunito',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;transition:opacity .2s;background:linear-gradient(135deg,var(--accent),var(--accent2))}.next-btn:hover{opacity:.9}
+.results{text-align:center;animation:fadeIn .5s ease}.results h2{font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:.5rem}.score-circle{width:150px;height:150px;border-radius:50%;margin:1.2rem auto;display:flex;flex-direction:column;align-items:center;justify-content:center;border:4px solid var(--correct);background:var(--surface)}.score-circle .big{font-family:'DM Serif Display',serif;font-size:2.8rem;line-height:1}.score-circle .label{font-size:.75rem;color:var(--text-muted)}.results-details{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:1.2rem 0}.result-stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:.8rem;box-shadow:var(--shadow)}.result-stat .num{font-family:'DM Serif Display',serif;font-size:1.6rem}.result-stat .lbl{font-size:.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.restart-btn{margin-top:1.2rem;padding:.7rem 2rem;border:2px solid var(--border);border-radius:10px;background:transparent;color:var(--text-muted);font-family:'Nunito',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s}.restart-btn:hover{border-color:var(--accent);color:var(--accent)}
+.sync-status{margin-top:.8rem;padding:.6rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;display:inline-block}.sync-ok{background:var(--correct-bg);color:var(--correct)}.sync-fail{background:var(--wrong-bg);color:var(--wrong)}.sync-pending{background:var(--gen5-bg);color:var(--gen5)}
+.ranking-section{margin-top:2rem;text-align:left;animation:fadeIn .4s ease}.ranking-section h3{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:.8rem;text-align:center}.ranking-table-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}.ranking-table{width:100%;border-collapse:collapse;font-size:.88rem}.ranking-table th{background:var(--surface2);padding:.7rem .8rem;text-align:left;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);border-bottom:2px solid var(--border)}.ranking-table td{padding:.65rem .8rem;border-bottom:1px solid var(--surface2)}.ranking-table tr:last-child td{border-bottom:none}.ranking-table .rank-pos{font-weight:800;color:var(--accent2);width:30px;text-align:center}.ranking-table .rank-score{font-weight:700}.rank-gold{color:#B7791F}.rank-silver{color:#718096}.rank-bronze{color:#C05621}
+.excel-btn{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;padding:.75rem 1.5rem;border:2px solid var(--correct);border-radius:10px;background:transparent;color:var(--correct);font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:all .2s}.excel-btn:hover{background:var(--correct);color:#fff}
+.review-section{margin-top:1.5rem;text-align:left}.review-section h3{font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:.8rem;text-align:center}.review-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;margin-bottom:.5rem;border-left:3px solid var(--text-muted)}.review-item.rev-correct{border-left-color:var(--correct)}.review-item.rev-wrong{border-left-color:var(--wrong)}.review-item .rev-q{font-weight:700;font-size:.85rem;margin-bottom:.3rem}.review-item .rev-detail{font-size:.8rem;color:var(--text-muted);line-height:1.4}.review-item .rev-detail span.ok{color:var(--correct);font-weight:600}.review-item .rev-detail span.ko{color:var(--wrong);font-weight:600}
+.footer{text-align:center;margin-top:2.5rem;font-size:.7rem;color:var(--text-muted);opacity:.5}
+@media(max-width:500px){.question-card{padding:1.3rem 1rem}.login-box{padding:1.5rem 1.2rem}.ranking-table{font-size:.8rem}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header"><h1>Personalidad e Identidad</h1><p>Quiz interactivo · Psicología · IES Alquipir</p></div>
+<div id="content"></div>
+<div class="footer">Psicología · IES Alquipir · Cehegín</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// ╔══════════════════════════════════════════════════════════════╗
+// ║  CONFIGURA AQUÍ TU URL DE GOOGLE APPS SCRIPT               ║
+// ║  Sigue la guía DOCX para obtenerla                         ║
+// ╚══════════════════════════════════════════════════════════════╝
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyf5yRKcnDA-_0zvQVkHFIFt575aNI7qUKrH6iA-M0NF_t9aVq5EmoyHmwZVr1fR7FG/exec';
+
+const TEACHER_PASS='Claudepaquico',STORAGE_KEY='quiz_personalidad_v1';
+const Q=[
+// ══════════ ESTRUCTURA PSICOSOMÁTICA ══════════
+{t:'test',q:'¿Qué significa el término «psicosomático» aplicado a la personalidad?',o:['Que la personalidad es exclusivamente mental','Que la personalidad surge de la interacción entre procesos psicológicos y corporales','Que los trastornos psicológicos causan enfermedades físicas','Que el cuerpo determina completamente la personalidad'],c:1,e:'Psico- (mente) y soma (cuerpo): la personalidad emerge de la interacción dinámica entre ambos.'},
+{t:'test',q:'Según el libro de Alonso García, la personalidad es la conjunción de:',o:['Carácter y conducta','Temperamento y carácter','Inteligencia y emotividad','Genética y ambiente'],c:1,e:'La personalidad conjuga temperamento (herencia biológica) y carácter (características adquiridas).'},
+{t:'test',q:'¿Cuáles son los cuatro pilares de la estructura psicosomática de la personalidad?',o:['Percepción, memoria, razón e imaginación','Temperamento, carácter, conducta e inteligencia','Sensibilidad, emotividad, deseos/volición y facultades cognitivas','Biología, sociedad, cultura y educación'],c:2,e:'Los cuatro pilares son: sensibilidad, emotividad, deseos y volición, y facultades cognitivas.'},
+{t:'test',q:'¿Cuál es la diferencia entre temperamento y carácter?',o:['El temperamento es adquirido y el carácter es innato','El temperamento es la herencia biológica y el carácter es adquirido socialmente','El temperamento se refiere a la inteligencia y el carácter a la emotividad','No hay diferencia: son sinónimos'],c:1,e:'El temperamento es nuestra herencia biológica (difícil de cambiar); el carácter son las características adquiridas.'},
+
+// ══════════ SENSIBILIDAD ══════════
+{t:'test',q:'¿Qué es la psicoestesia según Kretschmer?',o:['La capacidad sensorial pura de los cinco sentidos','El procesamiento afectivo de la sensibilidad (cómo nos afectan los estímulos)','Un trastorno de la percepción visual','La sensibilidad al dolor físico'],c:1,e:'La psicoestesia no es la capacidad sensorial pura sino el procesamiento afectivo de esa sensibilidad.'},
+{t:'test',q:'¿Cómo se comporta el temperamento esquizotímico según Kretschmer?',o:['Es sociable, abierto y expresivo','Oscila entre la alegría y la tristeza','Tiende a la separación entre vida interior y mundo exterior, con hiperestesia o anestesia','Busca constantemente la estimulación social'],c:2,e:'El esquizotímico oscila entre excesiva sensibilidad (hiperestesia) y frialdad/indiferencia (anestesia).'},
+{t:'test',q:'¿Qué tipo de sensibilidad capta los estímulos del interior del organismo?',o:['Exteroceptiva','Interoceptiva','Propulsiva','Afectiva'],c:1,e:'La sensibilidad interoceptiva informa sobre el estado interno del organismo (dolor visceral, propiocepción, equilibrio).'},
+
+// ══════════ EMOTIVIDAD ══════════
+{t:'test',q:'Según Wallon, ¿cuál es la función primordial de la emoción en el desarrollo del niño?',o:['Facilitar el aprendizaje académico','Constituir la forma primitiva de las relaciones de sociabilidad','Regular la temperatura corporal','Desarrollar la inteligencia abstracta'],c:1,e:'Para Wallon, la emoción es la forma primitiva de sociabilidad; el niño se conecta con las personas a través de las emociones antes que con los objetos.'},
+{t:'test',q:'¿Cuáles son las tres dimensiones básicas de la personalidad según Eysenck?',o:['Sensibilidad, emotividad y cognición','Neuroticismo (emotividad), extraversión y psicoticismo (dureza)','Ello, yo y superyó','Mismidad, ipseidad y narración'],c:1,e:'Las tres dimensiones de Eysenck son: neuroticismo (emotividad), extraversión y psicoticismo (dureza).'},
+{t:'test',q:'¿Qué relación existe entre emoción y pensamiento?',o:['Son completamente independientes','La emoción siempre potencia el pensamiento','La emoción intensa dificulta el pensamiento, pero las emociones son la base para llegar a pensar','El pensamiento elimina las emociones'],c:2,e:'La emoción intensa se opone al pensamiento claro, pero sin emociones (que nos conectan con los demás) nunca llegaríamos a pensar.'},
+
+// ══════════ DESEOS Y VOLICIÓN ══════════
+{t:'test',q:'¿Cuál es la diferencia entre volición y mero deseo?',o:['La volición implica querer algo y estar dispuesto a actuar; el deseo reconoce la dificultad de lograrlo','La volición es involuntaria y el deseo es consciente','El deseo es más fuerte que la volición','No hay diferencia funcional entre ambos'],c:0,e:'La volición implica querer la realidad de algo y actuar; el mero deseo reconoce la dificultad de que ocurra.'},
+{t:'test',q:'La akrasía (debilidad de la voluntad) según Aristóteles se refiere a:',o:['La capacidad de resistir tentaciones','Saber lo que se debe hacer pero no poder resistir el impulso','La fuerza de voluntad del sabio','La ausencia total de deseos'],c:1,e:'El akratés (incontinente) sabe lo que debe hacer pero no puede resistir el impulso. Equivale a un fallo en las funciones ejecutivas de inhibición.'},
+{t:'test',q:'¿Con qué área cerebral se asocian las funciones ejecutivas de la volición?',o:['El cerebelo','La amígdala','El lóbulo frontal (corteza prefrontal)','El hipocampo'],c:2,e:'La volición y las funciones ejecutivas (planificación, perseverancia, autocontrol) se asocian con el lóbulo frontal.'},
+{t:'test',q:'¿Qué respuesta constituye una resolución sana al conflicto entre deseo y volición?',o:['Ignorar completamente el deseo','Transformar el deseo en volición realista o aceptar que es solo un deseo','Convertir todo deseo en obsesión','Evitar cualquier meta difícil'],c:1,e:'La respuesta sana es transformar el deseo en volición realista o aceptar que es solo un deseo, ajustando expectativas.'},
+
+// ══════════ FACULTADES COGNITIVAS ══════════
+{t:'test',q:'¿Cuáles son las tres funciones de la imaginación?',o:['Visual, auditiva y táctil','Reproductora, creadora y anticipadora','Sensorial, motora y emocional','Consciente, inconsciente y preconsciente'],c:1,e:'La imaginación cumple tres funciones: reproductora (reconstruir experiencias), creadora (generar algo nuevo) y anticipadora (proyectarnos al futuro).'},
+{t:'test',q:'¿Cuántos elementos puede retener aproximadamente la memoria a corto plazo?',o:['De 1 a 3','De 5 a 9','De 15 a 20','Ilimitados'],c:1,e:'La memoria a corto plazo retiene entre 5 y 9 elementos durante unos 20-30 segundos.'},
+{t:'test',q:'La memoria procedimental (saber montar en bicicleta) se asocia con:',o:['El hipocampo','La corteza prefrontal','Los ganglios basales y el cerebelo','La amígdala'],c:2,e:'La memoria procedimental (implícita) se asocia con los ganglios basales y el cerebelo.'},
+
+// ══════════ IDENTIDAD PERSONAL ══════════
+{t:'test',q:'Según la teoría de la continuidad psicológica, ¿en qué se basa la identidad personal?',o:['En la existencia de un alma inmortal','En la continuidad de la conciencia y la memoria (Locke, Hume, Parfit)','En la permanencia del cuerpo físico','En los roles sociales que desempeñamos'],c:1,e:'Para Locke, la identidad se basa en la continuidad de la conciencia; para Hume, el yo es un haz de percepciones; para Parfit, el yo fijo es una ilusión.'},
+{t:'test',q:'¿Qué distingue la «mismidad» (idem) de la «ipseidad» (ipse) en Ricoeur?',o:['Son sinónimos para referirse al alma','La mismidad es lo que permanece igual; la ipseidad es la fidelidad a uno mismo a través del cambio','La mismidad es activa y la ipseidad pasiva','La mismidad es social y la ipseidad biológica'],c:1,e:'La mismidad (idem) es lo que permanece igual (ADN, rasgos estables); la ipseidad (ipse) es la fidelidad a uno mismo a través del cambio (promesa, compromiso).'},
+{t:'test',q:'¿De qué término griego procede la palabra «personalidad»?',o:['Psyché (alma)','Prosopon (máscara)','Logos (razón)','Ethos (carácter)'],c:1,e:'Personalidad procede del latín persona, que deriva del griego prosopon (máscara).'},
+
+// ══════════ ADOLESCENCIA E IDENTIDAD ══════════
+{t:'test',q:'Según Marcia, ¿qué estatus de identidad implica alta exploración y alto compromiso?',o:['Moratoria','Identidad hipotecada','Identidad difusa','Identidad lograda'],c:3,e:'La identidad lograda combina alta exploración (ha buscado, probado, reflexionado) con alto compromiso (ha tomado una decisión firme).'},
+{t:'test',q:'¿Qué estatus de identidad describe a alguien que tiene un compromiso firme sin haberlo cuestionado, porque lo heredó?',o:['Identidad lograda','Identidad difusa','Identidad hipotecada','Moratoria'],c:2,e:'La identidad hipotecada: bajo exploración pero alto compromiso heredado sin cuestionarlo.'},
+
+// ══════════ MODOS DE CONSTRUIR LA IDENTIDAD ══════════
+{t:'test',q:'Según Goffman, la identidad se construye a través de:',o:['La introspección solitaria','La negociación en las interacciones sociales (la vida como teatro)','La herencia genética exclusivamente','La meditación y el autoconocimiento'],c:1,e:'Para Goffman, la identidad es el resultado de una negociación en las interacciones sociales: representamos distintos papeles según el escenario.'},
+
+
+// ══════════ VERDADERO / FALSO ══════════
+{t:'vf',q:'El temperamento es la parte adquirida de la personalidad.',c:false,e:'Falso. El temperamento es la herencia biológica; el carácter es la parte adquirida.'},
+{t:'vf',q:'El ciclotímico según Kretschmer es sociable, abierto y expresivo.',c:true,e:'Verdadero. El ciclotímico se caracteriza por ser sociable, abierto, y oscila entre la alegría y la tristeza.'},
+{t:'vf',q:'La amígdala cerebral marca los recuerdos emocionales como especialmente importantes.',c:true,e:'Verdadero. La amígdala «marca» las experiencias emocionales, y por eso lo que nos emociona lo recordamos mejor.'},
+{t:'vf',q:'La percepción es exactamente igual a la sensación.',c:false,e:'Falso. La percepción organiza, interpreta y da significado a las sensaciones. La sensación es la captación bruta del estímulo.'},
+{t:'vf',q:'Para Hume, el «yo» es una sustancia permanente e inmutable.',c:false,e:'Falso. Para Hume, el «yo» no es más que un haz de percepciones sin sustancia subyacente.'},
+{t:'vf',q:'La moratoria de Marcia es un estatus con alta exploración y bajo compromiso.',c:true,e:'Verdadero. En la moratoria, el adolescente está buscando activamente pero todavía no ha decidido.'},
+{t:'vf',q:'Erikson consideraba la crisis de identidad en la adolescencia como algo patológico que debe evitarse.',c:false,e:'Falso. Erikson consideraba la crisis de identidad como una etapa necesaria y normal del desarrollo adolescente.'},
+{t:'vf',q:'Según Ricoeur, una persona con Alzheimer pierde la ipseidad pero conserva la mismidad.',c:true,e:'Verdadero. El Alzheimer destruye la capacidad de narrarse (ipseidad) mientras la persona sigue siendo biológicamente la misma (mismidad).'},
+
+// ══════════ 20 PREGUNTAS ADICIONALES ══════════
+
+{t:'test',q:'¿Qué es la memoria sensorial?',o:['La memoria de experiencias personales','Un almacén que retiene información de los sentidos durante milésimas de segundo','La capacidad de recordar olores y sabores de la infancia','La memoria asociada a los ganglios basales'],c:1,e:'La memoria sensorial retiene información captada por los sentidos durante milésimas de segundo (memoria icónica para lo visual, ecoica para lo auditivo).'},
+{t:'test',q:'La memoria declarativa (explícita) incluye:',o:['Saber montar en bicicleta y tocar un instrumento','Memoria episódica (recuerdos personales) y memoria semántica (conocimientos generales)','Solo la memoria de trabajo','Los reflejos condicionados'],c:1,e:'La memoria declarativa incluye la episódica (recuerdos personales) y la semántica (conocimientos generales), y se asocia con el hipocampo.'},
+
+{t:'test',q:'La teoría fisicalista o corporal de la identidad personal sostiene que:',o:['La identidad se basa en el alma inmortal','La identidad se basa en la continuidad física del cuerpo y el organismo biológico','La identidad es una narración que construimos','La identidad no existe realmente'],c:1,e:'El materialismo/fisicalismo sostiene que somos los mismos porque, aunque el cuerpo cambie, se trata del mismo organismo biológico.'},
+{t:'test',q:'¿Qué filósofo sostiene que la identidad personal se construye a través de las historias que nos contamos?',o:['Locke','Descartes','Ricoeur','Platón'],c:2,e:'Para Ricoeur, construimos nuestra identidad a través de la narración: somos las historias que tejemos sobre nosotros mismos.'},
+{t:'test',q:'Según Erikson, ¿cuál es el problema clave de la adolescencia?',o:['La elección profesional','La búsqueda de la identidad personal frente a la confusión','El desarrollo de la inteligencia abstracta','La independencia económica'],c:1,e:'Para Erikson, el problema central de la adolescencia es la búsqueda de identidad frente a la confusión de roles.'},
+{t:'test',q:'La sophrosyne (templanza) de Aristóteles consiste en:',o:['Eliminar completamente los deseos','Encontrar el término medio entre dos extremos viciosos, regulando deseos y emociones con la razón','Obedecer siempre a la autoridad','Seguir los impulsos naturales sin restricción'],c:1,e:'La sophrosyne es la virtud de encontrar el término medio, regulando deseos y emociones mediante la razón, sin anularlos.'},
+{t:'test',q:'¿Qué proceso describe la frustración en el contexto de deseo y volición?',o:['La satisfacción inmediata de un deseo','El estado emocional que surge cuando un obstáculo impide alcanzar un objetivo deseado','La renuncia voluntaria a un proyecto','La aceptación serena de la realidad'],c:1,e:'La frustración es el estado emocional que aparece cuando un obstáculo impide alcanzar un objetivo deseado; cuanto más intenso el deseo, más intensa la frustración.'},
+{t:'test',q:'La phrónesis (prudencia) de Aristóteles se corresponde en neurociencia con:',o:['La amígdala','El cerebelo','La corteza prefrontal dorsolateral','El tronco encefálico'],c:2,e:'La phrónesis (capacidad de deliberar correctamente sobre qué es bueno) se localiza en la corteza prefrontal dorsolateral, sede de las funciones ejecutivas.'},
+{t:'test',q:'¿Qué tipo de atención consiste en mantener la concentración durante un tiempo prolongado?',o:['Atención selectiva','Atención dividida','Atención sostenida','Atención flotante'],c:2,e:'La atención sostenida es la capacidad de mantener la concentración durante un tiempo prolongado.'},
+{t:'test',q:'La autoestima, según el libro de texto, es:',o:['La opinión que los demás tienen de nosotros','La capacidad de establecer la propia identidad y atribuirle un valor','Un rasgo exclusivamente genético','La comparación con los compañeros de clase'],c:1,e:'La autoestima es la capacidad de establecer la propia identidad y atribuirle un valor.'},
+
+
+{t:'test',q:'Los estoicos afirman que la felicidad consiste en:',o:['Satisfacer todos nuestros deseos','Alinear la voluntad exclusivamente con lo que está en nuestro poder','Acumular riqueza y prestigio','Evitar cualquier tipo de emoción'],c:1,e:'Para los estoicos (Epicteto), la felicidad consiste en querer solo lo que realmente depende de nosotros: nuestros juicios, impulsos, deseos y aversiones.'},
+{t:'test',q:'¿Qué relación señalan los apuntes entre los estoicos y la terapia cognitivo-conductual?',o:['No tienen ninguna relación','Beck y Ellis reconocieron su deuda con los estoicos: no nos perturban los hechos sino nuestros juicios','Los estoicos inventaron la psicoterapia','La TCC rechaza frontalmente las ideas estoicas'],c:1,e:'Beck y Ellis reconocieron explícitamente su deuda con los estoicos: «no son los acontecimientos los que nos perturban sino nuestros juicios sobre ellos» (Epicteto).'},
+
+{t:'vf',q:'La sensibilidad exteroceptiva capta estímulos del interior del organismo.',c:false,e:'Falso. La exteroceptiva capta estímulos del EXTERIOR (cinco sentidos). La interoceptiva capta los del interior.'},
+{t:'vf',q:'El hipocampo trabaja durante el sueño consolidando memorias y transfiriendo recuerdos del corto al largo plazo.',c:true,e:'Verdadero. Durante el sueño, el hipocampo transfiere recuerdos y elimina información irrelevante; despertamos con una memoria diferente.'},
+{t:'vf',q:'Según la teoría del alma (Platón, Descartes), la identidad se basa en la continuidad del cuerpo físico.',c:false,e:'Falso. La teoría del alma vincula la identidad a un alma inmaterial e inmortal, no al cuerpo.'},
+{t:'vf',q:'La identidad social, según Tajfel, es la conciencia de pertenecer a un grupo o categoría social.',c:true,e:'Verdadero. Tajfel define la identidad social como la percepción de pertenencia a grupos (familia, comunidad, nación).'}
+];
+
+function gR(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]')}catch{return[]}}
+function sR(e){const r=gR();r.push(e);localStorage.setItem(STORAGE_KEY,JSON.stringify(r))}
+
+let stu={name:'',email:'',curso:''},qs=[],cur=0,sc=0,tp=0,lg=[];
+const ct=document.getElementById('content');
+function sh(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b}
+
+function showLogin(m){m=m||'alumno';ct.innerHTML=`<div class="login-screen"><h2>${m==='alumno'?'Identificación del alumno/a':'Acceso del profesor'}</h2><p>${m==='alumno'?'Introduce tus datos para comenzar.':'Introduce la contraseña.'}</p><div class="login-box"><div class="login-toggle"><button class="toggle-btn ${m==='alumno'?'active':''}" onclick="showLogin('alumno')">Alumno/a</button><button class="toggle-btn ${m==='profesor'?'active':''}" onclick="showLogin('profesor')">Profesor</button></div><div id="lf">${m==='alumno'?sF():tF()}</div></div></div>`;const f=document.querySelector('#lf input');if(f)setTimeout(()=>f.focus(),80)}
+
+function sF(){return`<div class="field"><label>Nombre completo</label><input type="text" id="in" placeholder="Ej: María López García"><div class="error-msg" id="en">Introduce tu nombre</div></div><div class="field"><label>Correo corporativo</label><input type="email" id="ie" placeholder="tucorreo@murciaeduca.es"><div class="hint">@murciaeduca.es · @alu.murciaeduca.es · @alu365.murciaeduca.es</div><div class="error-msg" id="ee">Correo no válido</div></div><div class="field"><label>Curso</label><select id="ic"><option value="">— Selecciona —</option><option>1º ESO</option><option>2º ESO</option><option>3º ESO</option><option>4º ESO</option><option>1º Bachillerato</option><option>2º Bachillerato</option></select><div class="error-msg" id="ec">Selecciona curso</div></div><button class="login-btn" onclick="doSL()">Comenzar el quiz →</button>`}
+function tF(){return`<div class="field"><label>Contraseña</label><input type="password" id="ip" placeholder="Contraseña"><div class="error-msg" id="ep">Incorrecta</div></div><button class="login-btn" onclick="doTL()">Acceder →</button>`}
+
+function doSL(){const n=document.getElementById('in').value.trim(),e=document.getElementById('ie').value.trim().toLowerCase(),c=document.getElementById('ic').value;let v=1;
+if(!n||n.length<3){document.getElementById('en').style.display='block';v=0}else document.getElementById('en').style.display='none';
+if(!/^[^\s@]+@(alu365\.|alu\.)?murciaeduca\.es$/.test(e)){document.getElementById('ee').style.display='block';v=0}else document.getElementById('ee').style.display='none';
+if(!c){document.getElementById('ec').style.display='block';v=0}else document.getElementById('ec').style.display='none';
+if(!v)return;stu={name:n,email:e,curso:c};qs=sh(Q);cur=0;sc=0;tp=0;lg=[];showQ()}
+
+function doTL(){document.getElementById('ip').value===TEACHER_PASS?showTP():document.getElementById('ep').style.display='block'}
+
+function showQ(){
+if(cur>=qs.length){finish();return}const q=qs[cur],pct=(cur/qs.length*100).toFixed(0);
+let tl='',tc='';if(q.t==='test'){tl='Tipo test';tc='test'}else{tl='Verdadero / Falso';tc='vf'}
+let bd='';
+if(q.t==='test')bd=`<div class="options">${q.o.map((o,i)=>`<button class="option-btn" onclick="aT(${i})"><span class="letter">${'ABCD'[i]}</span><span>${o}</span></button>`).join('')}</div>`;
+else bd=`<div class="options"><button class="option-btn" onclick="aV(true)"><span class="letter">V</span><span>Verdadero</span></button><button class="option-btn" onclick="aV(false)"><span class="letter">F</span><span>Falso</span></button></div>`;
+ct.innerHTML=`<div class="student-tag"><span class="dot"></span>${stu.name} · ${stu.curso}</div><div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div><div class="progress-info"><span>Pregunta ${cur+1}/${qs.length}</span><span>${sc} pt${sc!==1?'s':''}</span></div><div class="question-card"><span class="q-type ${tc}">${tl}</span><div class="q-text">${q.q}</div>${bd}<div id="fb"></div><button class="next-btn" id="nb" onclick="nQ()">Siguiente →</button></div>`}
+
+function aT(i){const q=qs[cur],bs=document.querySelectorAll('.option-btn');bs.forEach(b=>b.classList.add('disabled'));bs[q.c].classList.add('correct');const ok=i===q.c;if(!ok)bs[i].classList.add('wrong');tp++;if(ok)sc++;lg.push({q:q.q,t:'test',ok,g:q.o[i],x:q.o[q.c]});sFB(ok,q.e)}
+function aV(v){const q=qs[cur],bs=document.querySelectorAll('.option-btn');bs.forEach(b=>b.classList.add('disabled'));const ok=v===q.c;bs[q.c?0:1].classList.add('correct');if(!ok)bs[v?0:1].classList.add('wrong');tp++;if(ok)sc++;lg.push({q:q.q,t:'vf',ok,g:v?'V':'F',x:q.c?'V':'F'});sFB(ok,q.e)}
+
+function sFB(ok,ex){document.getElementById('fb').innerHTML=`<div class="feedback ${ok?'fb-correct':'fb-wrong'}"><strong>${ok?'¡Correcto!':'Incorrecto'}</strong>${ex}</div>`;document.getElementById('nb').style.display='block'}
+function nQ(){cur++;showQ()}
+
+async function finish(){
+const pct=Math.round(sc/tp*100),nota=(pct/10).toFixed(1),now=new Date(),ds=now.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const entry={name:stu.name,email:stu.email,curso:stu.curso,score:sc,tp,pct,nota:parseFloat(nota),date:ds,log:lg};sR(entry);
+let gc='',gr='';if(pct>=90){gc='var(--correct)';gr='¡Sobresaliente!'}else if(pct>=70){gc='var(--gen1)';gr='Notable'}else if(pct>=50){gc='var(--gen5)';gr='Suficiente'}else{gc='var(--wrong)';gr='Necesitas repasar'}
+let rev='';lg.forEach((e,i)=>{const cls=e.ok?'rev-correct':'rev-wrong';let d='';
+d=e.ok?`<span class="ok">✓ ${e.g}</span>`:`<span class="ko">✗ ${e.g}</span> · <span class="ok">Correcta: ${e.x}</span>`;
+rev+=`<div class="review-item ${cls}"><div class="rev-q">${i+1}. ${e.q}</div><div class="rev-detail">${d}</div></div>`});
+ct.innerHTML=`<div class="results"><div class="student-tag"><span class="dot"></span>${stu.name} · ${stu.curso}</div><h2>Resultados</h2><div class="score-circle" style="border-color:${gc}"><span class="big" style="color:${gc}">${pct}%</span><span class="label">de aciertos</span></div><p style="font-size:1.15rem;font-weight:700;color:${gc}">${gr}</p><div class="results-details"><div class="result-stat"><div class="num" style="color:var(--correct)">${sc}</div><div class="lbl">Aciertos</div></div><div class="result-stat"><div class="num" style="color:var(--wrong)">${tp-sc}</div><div class="lbl">Errores</div></div><div class="result-stat"><div class="num">${tp}</div><div class="lbl">Total</div></div><div class="result-stat"><div class="num" style="color:${gc}">${nota}</div><div class="lbl">Nota /10</div></div></div><div id="ss" class="sync-status sync-pending">⏳ Enviando resultados...</div><br><button class="restart-btn" onclick="showLogin('alumno')">Volver a empezar</button><div class="review-section"><h3>Revisión de respuestas</h3>${rev}</div></div>`;
+const r=await sendGS(entry);const ss=document.getElementById('ss');
+if(r==='ok'){ss.className='sync-status sync-ok';ss.textContent='✓ Resultados enviados al profesor'}
+else if(r==='no-url'){ss.className='sync-status sync-pending';ss.textContent='ℹ Guardado local (Google Sheets no configurado)'}
+else{ss.className='sync-status sync-fail';ss.textContent='⚠ Error de envío. Guardado localmente.'}}
+
+function showTP(){
+const res=gR().sort((a,b)=>b.nota-a.nota||a.name.localeCompare(b.name));
+let rows='';res.forEach((r,i)=>{let pc='';if(i===0)pc='rank-gold';else if(i===1)pc='rank-silver';else if(i===2)pc='rank-bronze';
+rows+=`<tr><td class="rank-pos ${pc}">${i+1}</td><td><strong>${r.name}</strong></td><td>${r.curso}</td><td>${r.email}</td><td class="rank-score">${r.nota}/10</td><td>${r.score}/${r.tp}</td><td>${r.pct}%</td><td>${r.date}</td></tr>`});
+if(!res.length)rows=`<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted)">Sin resultados locales.<br>Los centralizados están en Google Sheets.</td></tr>`;
+ct.innerHTML=`<div class="ranking-section"><h3>Panel del profesor</h3><p style="text-align:center;font-size:.85rem;color:var(--text-muted);margin-bottom:1rem">Datos locales. Los centralizados están en tu <strong>Google Sheets</strong>.</p><div class="ranking-table-wrap"><table class="ranking-table"><thead><tr><th>#</th><th>Alumno/a</th><th>Curso</th><th>Correo</th><th>Nota</th><th>Aciertos</th><th>%</th><th>Fecha</th></tr></thead><tbody>${rows}</tbody></table></div>${res.length?`<div style="text-align:center"><button class="excel-btn" onclick="dlXL()">📊 Descargar Excel</button><button class="excel-btn" onclick="if(confirm('¿Borrar datos locales?')){localStorage.removeItem(STORAGE_KEY);showTP()}" style="border-color:var(--wrong);color:var(--wrong);margin-left:.5rem">Borrar datos</button></div>`:''}<div style="text-align:center;margin-top:1rem"><button class="restart-btn" onclick="showLogin('alumno')">← Volver</button></div></div>`}
+
+function dlXL(){
+const res=gR().sort((a,b)=>b.nota-a.nota);
+const d=[['RESULTADOS QUIZ PERSONALIDAD E IDENTIDAD — IES Alquipir'],[''],['#','Alumno/a','Curso','Correo','Nota','Aciertos','Total','%','Fecha']];
+res.forEach((r,i)=>d.push([i+1,r.name,r.curso,r.email,r.nota,r.score,r.tp,r.pct+'%',r.date]));
+const wb=XLSX.utils.book_new(),ws=XLSX.utils.aoa_to_sheet(d);
+ws['!cols']=[{wch:5},{wch:28},{wch:16},{wch:32},{wch:6},{wch:8},{wch:6},{wch:6},{wch:18}];
+ws['!merges']=[{s:{r:0,c:0},e:{r:0,c:8}}];
+XLSX.utils.book_append_sheet(wb,ws,'Resultados');XLSX.writeFile(wb,'Resultados_Quiz_Personalidad.xlsx')}
+
+async function sendGS(entry){
+if(!APPS_SCRIPT_URL||APPS_SCRIPT_URL.includes('PEGA_AQUI'))return'no-url';
+try{await fetch(APPS_SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({fecha:entry.date,nombre:entry.name,curso:entry.curso,correo:entry.email,nota:entry.nota,aciertos:entry.score,total:entry.tp,porcentaje:entry.pct})});return'ok'}catch{return'error'}}
+
+showLogin('alumno');
+</script>
+</body>
+</html>
